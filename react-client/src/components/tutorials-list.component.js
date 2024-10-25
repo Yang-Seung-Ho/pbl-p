@@ -141,7 +141,7 @@ export default class TutorialsList extends Component {
           </button>
         </div>
         <div className="col-md-6">
-          {currentTutorial ? (
+        {currentTutorial ? (
             <div>
               <h4>Tutorial</h4>
               <div>
@@ -152,17 +152,32 @@ export default class TutorialsList extends Component {
               </div>
               <div>
                 <label>
-                  <strong>Description:</strong>
+                  <strong>Team Name:</strong>
                 </label>{" "}
-                {currentTutorial.description}
+                {currentTutorial.teamName}
               </div>
               <div>
                 <label>
-                  <strong>Status:</strong>
+                  <strong>Member:</strong>
                 </label>{" "}
-                {currentTutorial.published ? "Published" : "Pending"}
+                {currentTutorial.member}
               </div>
-
+              <div>
+                <label>
+                  <strong>Thought:</strong>
+                </label>{" "}
+                {currentTutorial.thought}
+              </div>
+              {currentTutorial.fileName && (
+                <div>
+                  <label>
+                    <strong>Attached File:</strong>
+                  </label>{" "}
+                  <a href={`http://localhost:8080/${currentTutorial.filePath}`} target="_blank" rel="noopener noreferrer">
+                    {currentTutorial.fileName}
+                  </a>
+                </div>
+              )}
               <Link
                 to={"/tutorials/" + currentTutorial.id}
                 className="badge badge-warning"

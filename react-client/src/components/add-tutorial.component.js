@@ -5,16 +5,20 @@ export default class AddTutorial extends Component {
   constructor(props) {
     super(props);
     this.onChangeTitle = this.onChangeTitle.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
+    this.onChangeTeamName = this.onChangeTeamName.bind(this);
+    this.onChangeMember = this.onChangeMember.bind(this);
+    this.onChangeThought = this.onChangeThought.bind(this);
+    this.onFileChange = this.onFileChange.bind(this);
     this.saveTutorial = this.saveTutorial.bind(this);
     this.newTutorial = this.newTutorial.bind(this);
 
     this.state = {
       id: null,
       title: "",
-      description: "", 
-      published: false,
-
+      teamName: "", 
+      member: "",
+      thought: "",
+      file: null,
       submitted: false
     };
   }
@@ -24,27 +28,45 @@ export default class AddTutorial extends Component {
       title: e.target.value
     });
   }
-
-  onChangeDescription(e) {
+  onChangeTeamName(e) {
     this.setState({
-      description: e.target.value
+      teamName: e.target.value
+    });
+  }
+  onChangeMember(e) {
+    this.setState({
+      member: e.target.value
+    });
+  }
+  onChangeThought(e) {
+    this.setState({
+      thought: e.target.value
+    });
+  }
+  onFileChange(e) {
+    this.setState({
+      file: e.target.files[0]
     });
   }
 
   saveTutorial() {
-    var data = {
-      title: this.state.title,
-      description: this.state.description
-    };
+    const formData = new FormData();
+    formData.append('title', this.state.title);
+    formData.append('teamName', this.state.teamName);
+    formData.append('member', this.state.member);
+    formData.append('thought', this.state.thought);
+    if (this.state.file) {
+      formData.append('file', this.state.file);
+    }
 
-    TutorialDataService.create(data)
+    TutorialDataService.create(formData)
       .then(response => {
         this.setState({
           id: response.data.id,
           title: response.data.title,
-          description: response.data.description,
-          published: response.data.published,
-
+          teamName: response.data.teamName,
+          member: response.data.member,
+          thought: response.data.thought,
           submitted: true
         });
         console.log(response.data);
@@ -58,9 +80,10 @@ export default class AddTutorial extends Component {
     this.setState({
       id: null,
       title: "",
-      description: "",
-      published: false,
-
+      teamName: "",
+      member: "",
+      thought: "",
+      file: null,
       submitted: false
     });
   }
@@ -78,7 +101,7 @@ export default class AddTutorial extends Component {
         ) : (
           <div>
             <div className="form-group">
-              <label htmlFor="title">Title</label>
+              <label htmlFor="title">제목</label>
               <input
                 type="text"
                 className="form-control"
@@ -89,20 +112,52 @@ export default class AddTutorial extends Component {
                 name="title"
               />
             </div>
-
             <div className="form-group">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="teamName">팀명</label>
               <input
                 type="text"
                 className="form-control"
-                id="description"
+                id="teamName"
                 required
-                value={this.state.description}
-                onChange={this.onChangeDescription}
-                name="description"
+                value={this.state.teamName}
+                onChange={this.onChangeTeamName}
+                name="teamName"
               />
             </div>
-
+            <div className="form-group">
+              <label htmlFor="member">팀원</label>
+              <input
+                type="text"
+                className="form-control"
+                id="member"
+                required
+                value={this.state.member}
+                onChange={this.onChangeMember}
+                name="member"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="thought">소감문</label>
+              <input
+                type="text"
+                className="form-control"
+                id="thought"
+                required
+                value={this.state.thought}
+                onChange={this.onChangeThought}
+                name="thought"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="file">파일 첨부</label>
+              <input
+                type="file"
+                className="form-control-file"
+                id="file"
+                onChange={this.onFileChange}
+                name="file"
+              />
+            </div>
             <button onClick={this.saveTutorial} className="btn btn-success">
               Submit
             </button>

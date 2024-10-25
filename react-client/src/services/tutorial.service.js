@@ -2,15 +2,15 @@ import http from "../http-common";
 
 class TutorialDataService {
   getAll() {
-    return http.get("/tutorials");
+    return http.get("/proposal");  // proposals 경로로 변경
   }
 
   get(id) {
-    return http.get(`/tutorials/${id}`);
+    return http.get(`/proposal/${id}`);
   }
 
   create(data) {
-    return http.post("/tutorials", data);
+    return http.post("/proposal/submit", data);
   }
 
   update(id, data) {

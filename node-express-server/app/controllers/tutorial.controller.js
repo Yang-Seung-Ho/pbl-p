@@ -1,9 +1,24 @@
 const db = require("../models");
 const Tutorial = db.tutorials;
 const Op = db.Sequelize.Op;
+const multer = require('multer');
+const path = require('path');
 
+// 파일 업로드를 위한 multer 설정
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')  // 'uploads/' 디렉토리에 파일 저장
+  },
+  filename: function (req, file, cb) {
+    // 파일명에 한글, 특수문자가 있을 경우를 대비해 UTF-8로 인코딩
+    const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8');
+    cb(null, Date.now() + path.extname(fileName));  // 파일명 중복 방지
+  }
+});
+
+const upload = multer({ storage: storage });
 // Create and Save a new Tutorial
-exports.create = (req, res) => {
+exports.create = [upload.single('file'), (req, res) => {
   // Validate request
   if (!req.body.title) {
     res.status(400).send({
@@ -15,8 +30,11 @@ exports.create = (req, res) => {
   // Create a Tutorial
   const tutorial = {
     title: req.body.title,
-    description: req.body.description,
-    published: req.body.published ? req.body.published : false
+    teamName: req.body.teamName,
+    member: req.body.member,
+    thought: req.body.thought,
+    fileName: req.file ? req.file.originalname : null,
+    filePath: req.file ? req.file.path : null
   };
 
   // Save Tutorial in the database
@@ -30,7 +48,8 @@ exports.create = (req, res) => {
           err.message || "Some error occurred while creating the Tutorial."
       });
     });
-};
+}];
+
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {

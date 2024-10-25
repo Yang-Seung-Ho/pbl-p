@@ -6,9 +6,11 @@ class Tutorial extends Component {
   constructor(props) {
     super(props);
     this.onChangeTitle = this.onChangeTitle.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
+    this.onChangeTeamName = this.onChangeTeamName.bind(this);
+    this.onChangeMember = this.onChangeMember.bind(this);
+    this.onChangeThought = this.onChangeThought.bind(this);
+    this.onFileChange = this.onFileChange.bind(this);
     this.getTutorial = this.getTutorial.bind(this);
-    this.updatePublished = this.updatePublished.bind(this);
     this.updateTutorial = this.updateTutorial.bind(this);
     this.deleteTutorial = this.deleteTutorial.bind(this);
 
@@ -16,10 +18,14 @@ class Tutorial extends Component {
       currentTutorial: {
         id: null,
         title: "",
-        description: "",
-        published: false
+        teamName: "",
+        member: "",
+        thought: "",
+        fileName: "",
+        filePath: ""
       },
-      message: ""
+      message: "",
+      file: null
     };
   }
 
@@ -29,7 +35,6 @@ class Tutorial extends Component {
 
   onChangeTitle(e) {
     const title = e.target.value;
-
     this.setState(function(prevState) {
       return {
         currentTutorial: {
@@ -40,15 +45,38 @@ class Tutorial extends Component {
     });
   }
 
-  onChangeDescription(e) {
-    const description = e.target.value;
-    
+  onChangeTeamName(e) {
+    const teamName = e.target.value;
     this.setState(prevState => ({
       currentTutorial: {
         ...prevState.currentTutorial,
-        description: description
+        teamName: teamName
       }
     }));
+  }
+
+  onChangeMember(e) {
+    const member = e.target.value;
+    this.setState(prevState => ({
+      currentTutorial: {
+        ...prevState.currentTutorial,
+        member: member
+      }
+    }));
+  }
+
+  onChangeThought(e) {
+    const thought = e.target.value;
+    this.setState(prevState => ({
+      currentTutorial: {
+        ...prevState.currentTutorial,
+        thought: thought
+      }
+    }));
+  }
+
+  onFileChange(e) {
+    this.setState({ file: e.target.files[0] });
   }
 
   getTutorial(id) {
@@ -64,38 +92,25 @@ class Tutorial extends Component {
       });
   }
 
-  updatePublished(status) {
-    var data = {
-      id: this.state.currentTutorial.id,
-      title: this.state.currentTutorial.title,
-      description: this.state.currentTutorial.description,
-      published: status
-    };
-
-    TutorialDataService.update(this.state.currentTutorial.id, data)
-      .then(response => {
-        this.setState(prevState => ({
-          currentTutorial: {
-            ...prevState.currentTutorial,
-            published: status
-          }
-        }));
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-
   updateTutorial() {
+    const formData = new FormData();
+    formData.append('title', this.state.currentTutorial.title);
+    formData.append('teamName', this.state.currentTutorial.teamName);
+    formData.append('member', this.state.currentTutorial.member);
+    formData.append('thought', this.state.currentTutorial.thought);
+    if (this.state.file) {
+      formData.append('file', this.state.file);
+    }
+
     TutorialDataService.update(
       this.state.currentTutorial.id,
-      this.state.currentTutorial
+      formData
     )
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "The tutorial was updated successfully!"
+          message: "The tutorial was updated successfully!",
+          currentTutorial: response.data
         });
       })
       .catch(e => {
@@ -134,39 +149,53 @@ class Tutorial extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="description">Description</label>
+                <label htmlFor="teamName">Team Name</label>
                 <input
                   type="text"
                   className="form-control"
-                  id="description"
-                  value={currentTutorial.description}
-                  onChange={this.onChangeDescription}
+                  id="teamName"
+                  value={currentTutorial.teamName}
+                  onChange={this.onChangeTeamName}
                 />
               </div>
-
               <div className="form-group">
-                <label>
-                  <strong>Status:</strong>
-                </label>
-                {currentTutorial.published ? "Published" : "Pending"}
+                <label htmlFor="member">Member</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="member"
+                  value={currentTutorial.member}
+                  onChange={this.onChangeMember}
+                />
               </div>
+              <div className="form-group">
+                <label htmlFor="thought">Thought</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="thought"
+                  value={currentTutorial.thought}
+                  onChange={this.onChangeThought}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="file">File</label>
+                <input
+                  type="file"
+                  className="form-control-file"
+                  id="file"
+                  onChange={this.onFileChange}
+                />
+              </div>
+              {currentTutorial.fileName && (
+                <div className="form-group">
+                  <label>Current File: </label>
+                  <a href={`http://localhost:8080/${currentTutorial.filePath}`} target="_blank" rel="noopener noreferrer">
+                    {currentTutorial.fileName}
+                  </a>
+                </div>
+              )}
             </form>
-
-            {currentTutorial.published ? (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => this.updatePublished(false)}
-              >
-                UnPublish
-              </button>
-            ) : (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => this.updatePublished(true)}
-              >
-                Publish
-              </button>
-            )}
 
             <button
               className="badge badge-danger mr-2"

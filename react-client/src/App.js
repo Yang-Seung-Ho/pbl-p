@@ -2,42 +2,31 @@ import React, { Component } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-
+import Menu from "./components/Menu";
 import AddTutorial from "./components/add-tutorial.component";
-import Tutorial from "./components/tutorial.component";
-import TutorialsList from "./components/tutorials-list.component";
+import Proposal from "./pages/Proposal";
+import Content from "./components/Content";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import GlobalStyle from './GlobalStyles';
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/tutorials"} className="navbar-brand">
-            bezKoder
-          </Link>
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/tutorials"} className="nav-link">
-                Tutorials
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to={"/add"} className="nav-link">
-                Add
-              </Link>
-            </li>
-          </div>
-        </nav>
-
-        <div className="container mt-3">
-          <Routes>
-            <Route path="/" element={<TutorialsList/>} />
-            <Route path="/tutorials" element={<TutorialsList/>} />
-            <Route path="/add" element={<AddTutorial/>} />
-            <Route path="/tutorials/:id" element={<Tutorial/>} />
-          </Routes>
+      <>
+        <GlobalStyle />
+        <div style={{ display: 'flex' }}>
+          <Menu />
+          <Content>
+            {/* Routes는 Router로 감싸져 있으므로 바로 사용 가능 */}
+            <Routes>
+              <Route path="/" />
+              <Route path="/proposal" element={<Proposal />} />
+              <Route path="/proposal/submit" element={<AddTutorial />} />
+            </Routes>
+          </Content>
         </div>
-      </div>
+      </>
     );
   }
 }

@@ -3,11 +3,20 @@ module.exports = (sequelize, Sequelize) => {
     title: {
       type: Sequelize.STRING
     },
-    description: {
+    teamName: {   
+      type: Sequelize.STRING
+    },  
+    member: {   
       type: Sequelize.STRING
     },
-    published: {
-      type: Sequelize.BOOLEAN
+    thought: {   
+      type: Sequelize.STRING
+    },
+    fileName: {
+      type: Sequelize.STRING
+    },
+    filePath: {
+      type: Sequelize.STRING
     }
   });
 
