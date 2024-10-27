@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import TutorialDataService from "../services/tutorial.service";
-
+import Title from "./Title";
 export default class AddTutorial extends Component {
   constructor(props) {
     super(props);
@@ -90,6 +90,9 @@ export default class AddTutorial extends Component {
 
   render() {
     return (
+    
+      <>
+      <Title title={this.props.text} />
       <div className="submit-form">
         {this.state.submitted ? (
           <div>
@@ -99,6 +102,7 @@ export default class AddTutorial extends Component {
             </button>
           </div>
         ) : (
+          <>          
           <div>
             <div className="form-group">
               <label htmlFor="title">제목</label>
@@ -162,8 +166,10 @@ export default class AddTutorial extends Component {
               Submit
             </button>
           </div>
+          </>
         )}
       </div>
+      </>
     );
   }
 }

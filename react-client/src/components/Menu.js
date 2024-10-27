@@ -5,7 +5,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Bootstrap JS
 import styled from 'styled-components';
 
-// styled-components for NavBox
 const NavBox = styled.nav`
   width: ${(props) => (props.collapsed ? '80px' : '260px')};
   height: 100vh;
@@ -54,7 +53,6 @@ const NavBox = styled.nav`
   }
 `;
 
-// styled-components for TitleBox
 const TitleBox = styled.div`
   width: 100%;
   height: 120px;
@@ -71,13 +69,12 @@ const TitleBox = styled.div`
   transition: display 0.3s ease;
 `;
 
-// Toggle Box
 const ToggleBox = styled.div`
   display: flex;
   width: 100%;
   justify-content: ${(props) => (props.collapsed ? '' : 'center')};
-`
-// Toggle Button
+`;
+
 const ToggleButton = styled.button`
   background: transparent;
   border: none;
@@ -94,7 +91,9 @@ const ToggleButton = styled.button`
 const Menu = () => {
   const [collapsed, setCollapsed] = useState(false); // State for collapsing
   const location = useLocation();
-  const section = location.pathname.substring(1);
+  
+  // URL의 첫 번째 경로 부분만 추출
+  const section = location.pathname.split('/')[1];
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -102,23 +101,25 @@ const Menu = () => {
 
   return (
     <>
-    
       <NavBox collapsed={collapsed} className="navbar navbar-expand-lg flex-column">
         <ToggleBox>
           <TitleBox collapsed={collapsed}>PBL-P</TitleBox>
           <ToggleButton collapsed={collapsed} onClick={toggleSidebar}>
-            <i class="fa-solid fa-bars"></i>
+            <i className="fa-solid fa-bars"></i>
           </ToggleButton>
         </ToggleBox>
         <div className="container-fluid">
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav flex-column">
               {menuData.map((item) => (
-                <li key={item.id} className={`nav-item ${section === item.route.substring(1) ? 'active' : ''}`}>
+                <li
+                  key={item.id}
+                  className={`nav-item ${
+                    section === item.route.substring(1) ? 'active' : ''
+                  }`}
+                >
                   <Link className="nav-link" to={item.route}>
-                    <span className="icon">
-                      {item.icon}
-                    </span>
+                    <span className="icon">{item.icon}</span>
                     {!collapsed && item.label}
                   </Link>
                 </li>

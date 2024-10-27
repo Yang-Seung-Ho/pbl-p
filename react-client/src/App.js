@@ -5,6 +5,7 @@ import "./App.css";
 import Menu from "./components/Menu";
 import AddTutorial from "./components/add-tutorial.component";
 import Proposal from "./pages/Proposal";
+import Design from "./pages/Design";
 import Content from "./components/Content";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -22,7 +23,9 @@ class App extends Component {
             <Routes>
               <Route path="/" />
               <Route path="/proposal" element={<Proposal />} />
-              <Route path="/proposal/submit" element={<AddTutorial />} />
+              <Route path="/proposal/submit" element={<AddTutorial text="제안서 - 작성 방법 및 예시" />} />
+              <Route path="/design" element={<Design />} />
+              <Route path="/design/submit" element={<AddTutorial text="설계서 - 작성 방법 및 예시" />} />
             </Routes>
           </Content>
         </div>

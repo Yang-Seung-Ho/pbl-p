@@ -27,10 +27,20 @@ const Proposal = () => {
     // 등록 버튼 클릭 시 실행될 함수
     const handleRegisterClick = () => {
         navigate("/proposal/submit", {
-
+            state: {
+                formTitle: "제안서 - 작성 방법 및 예시",
+                fields: [
+                    { label: "제안서 제목 :", type: "text", placeholder: "제목을 입력하세요", name: "title", required: true },
+                    { label: "팀명 :", type: "text", placeholder: "내용을 입력하세요", name: "team", required: true },
+                    { label: "팀원 :", type: "textarea", placeholder: "내용을 입력하세요", name: "teammate", required: true },
+                    { label: "날짜 :", type: "date", placeholder: "내용을 입력하세요", name: "date", required: true },
+                    { label: "소감문 :", type: "textarea", placeholder: "내용을 입력하세요", name: "", required: true },
+                    { label: "발표 동영상 :", type: "file", placeholder: "내용을 입력하세요", name: "pres"},
+                    { label: "첨부파일 :", type: "file", placeholder: "내용을 입력하세요", name: "file", required: true },
+                ]
+            }
         });
     };
-    
 
     return (
         <>
